@@ -73,21 +73,21 @@ with st.sidebar:
 
 # ================= MAIN INTENTS =================
 
-def tab_cinema_mode():
+ddef tab_cinema_mode():
     st.markdown('<p class="big-font">Cinema Mode: Watch & Learn</p>', unsafe_allow_html=True)
     
-    # 1. THÊM TÙY CHỌN DÙNG LINK RIÊNG CỦA NGƯỜI DÙNG
+    # 1. ADD OPTION FOR CUSTOM USER LINK
     movie_options = {
         "Avengers: Infinity War (Thanos)": "https://www.youtube.com/watch?v=6ZfuNTqbHE8",
         "Frozen (Let it Go)": "https://www.youtube.com/watch?v=L0MK7qz13bU",
-        "🎬 Dùng Video YouTube Của Tui": "custom" # Tính năng mới!
+        "🎬 Use Custom YouTube Video": "custom" # New feature!
     }
     
     selected_movie = st.selectbox("Choose a Scene:", list(movie_options.keys()))
     
-    # 2. XỬ LÝ NẾU CHỌN LINK TỰ DO
-    if selected_movie == "🎬 Dùng Video YouTube Của Tui":
-        custom_url = st.text_input("🔗 Dán link YouTube của bà vô đây nha (Ví dụ: nhạc Taylor Swift, Vlog...):")
+    # 2. HANDLE CUSTOM LINK SELECTION
+    if selected_movie == "🎬 Use Custom YouTube Video":
+        custom_url = st.text_input("🔗 Paste your YouTube link here (e.g., Taylor Swift MV, Vlogs...):")
         video_url = custom_url if custom_url.strip() != "" else None
     else:
         video_url = movie_options[selected_movie]
@@ -99,25 +99,25 @@ def tab_cinema_mode():
             try:
                 st.video(video_url)
             except:
-                st.error("Link này hông chạy được bà ơi, kiểm tra lại xem đúng link YouTube chưa nha!")
+                st.error("Cannot load this link. Please check if it's a valid YouTube URL!")
         else:
-            st.info("Chờ bà dán link vô nè...")
+            st.info("Waiting for your link...")
     
     with col2:
         st.info("Learning Challenge")
         
-        # 3. GIAO DIỆN HỌC TẬP CHO TỪNG VIDEO
-        if selected_movie == "🎬 Dùng Video YouTube Của Tui":
-            st.markdown("**Góc ghi chú từ mới:**")
-            st.caption("Vừa xem clip idol vừa note từ vựng nha!")
-            notes = st.text_area("Gõ từ vựng / câu hay ho bà nghe được vô đây:", height=150)
-            if st.button("Lưu Ghi Chú"):
+        # 3. LEARNING INTERFACE FOR EACH VIDEO
+        if selected_movie == "🎬 Use Custom YouTube Video":
+            st.markdown("**Vocabulary Notes:**")
+            st.caption("Take notes while watching your favorite clips!")
+            notes = st.text_area("Type new words or cool phrases you hear here:", height=150)
+            if st.button("Save Notes"):
                 if notes.strip():
-                    st.success("Đã lưu vô bộ nhớ! +10 XP chăm chỉ")
+                    st.success("Notes saved! +10 XP for hard work")
                     st.session_state.xp += 10
                     st.session_state.skills['Listening'] += 2
                 else:
-                    st.warning("Ghi chữ vô đi rồi mới lưu được chứ bà!")
+                    st.warning("Please write something before saving!")
                     
         elif "Thanos" in selected_movie:
             st.markdown("**Complete the quote:**")
@@ -136,10 +136,10 @@ def tab_cinema_mode():
         elif "Frozen" in selected_movie:
             st.markdown("**Vocabulary Check:**")
             st.markdown("What does **'Isolation'** mean?")
-            options = ["Sự kết nối", "Sự cô lập", "Sự vui vẻ"]
+            options = ["Connection", "Isolation", "Happiness"]
             choice = st.radio("Choose meaning:", options)
             if st.button("Check", key="btn_frozen"):
-                if choice == "Sự cô lập":
+                if choice == "Isolation":
                     st.success("Correct! +15 XP | +5 Vocabulary")
                     st.session_state.xp += 15
                     st.session_state.skills['Vocabulary'] += 5 
