@@ -73,7 +73,7 @@ with st.sidebar:
 
 # ================= MAIN INTENTS =================
 
-ddef tab_cinema_mode():
+def tab_cinema_mode():
     st.markdown('<p class="big-font">Cinema Mode: Watch & Learn</p>', unsafe_allow_html=True)
     
     # 1. ADD OPTION FOR CUSTOM USER LINK
