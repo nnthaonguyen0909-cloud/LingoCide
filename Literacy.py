@@ -76,22 +76,50 @@ with st.sidebar:
 def tab_cinema_mode():
     st.markdown('<p class="big-font">Cinema Mode: Watch & Learn</p>', unsafe_allow_html=True)
     
+    # 1. THÊM TÙY CHỌN DÙNG LINK RIÊNG CỦA NGƯỜI DÙNG
     movie_options = {
         "Avengers: Infinity War (Thanos)": "https://www.youtube.com/watch?v=6ZfuNTqbHE8",
-        "Frozen (Let it Go)": "https://www.youtube.com/watch?v=L0MK7qz13bU"
+        "Frozen (Let it Go)": "https://www.youtube.com/watch?v=L0MK7qz13bU",
+        "🎬 Dùng Video YouTube Của Tui": "custom" # Tính năng mới!
     }
     
     selected_movie = st.selectbox("Choose a Scene:", list(movie_options.keys()))
     
+    # 2. XỬ LÝ NẾU CHỌN LINK TỰ DO
+    if selected_movie == "🎬 Dùng Video YouTube Của Tui":
+        custom_url = st.text_input("🔗 Dán link YouTube của bà vô đây nha (Ví dụ: nhạc Taylor Swift, Vlog...):")
+        video_url = custom_url if custom_url.strip() != "" else None
+    else:
+        video_url = movie_options[selected_movie]
+    
     col1, col2 = st.columns([2, 1])
     
     with col1:
-        st.video(movie_options[selected_movie])
+        if video_url:
+            try:
+                st.video(video_url)
+            except:
+                st.error("Link này hông chạy được bà ơi, kiểm tra lại xem đúng link YouTube chưa nha!")
+        else:
+            st.info("Chờ bà dán link vô nè...")
     
     with col2:
-        st.info("Listening Challenge")
+        st.info("Learning Challenge")
         
-        if "Thanos" in selected_movie:
+        # 3. GIAO DIỆN HỌC TẬP CHO TỪNG VIDEO
+        if selected_movie == "🎬 Dùng Video YouTube Của Tui":
+            st.markdown("**Góc ghi chú từ mới:**")
+            st.caption("Vừa xem clip idol vừa note từ vựng nha!")
+            notes = st.text_area("Gõ từ vựng / câu hay ho bà nghe được vô đây:", height=150)
+            if st.button("Lưu Ghi Chú"):
+                if notes.strip():
+                    st.success("Đã lưu vô bộ nhớ! +10 XP chăm chỉ")
+                    st.session_state.xp += 10
+                    st.session_state.skills['Listening'] += 2
+                else:
+                    st.warning("Ghi chữ vô đi rồi mới lưu được chứ bà!")
+                    
+        elif "Thanos" in selected_movie:
             st.markdown("**Complete the quote:**")
             st.markdown('*"Dread it. Run from it. _______ arrives all the same."*')
             ans = st.text_input("Type the missing word:", key="vid_q1")
@@ -101,7 +129,7 @@ def tab_cinema_mode():
                     st.balloons()
                     st.success("Correct! +20 XP | +5 Listening")
                     st.session_state.xp += 20
-                    st.session_state.skills['Listening'] += 5 # Tăng điểm kỹ năng Nghe
+                    st.session_state.skills['Listening'] += 5 
                 else:
                     st.error("Try again! Hint: It starts with 'D'")
         
@@ -114,7 +142,7 @@ def tab_cinema_mode():
                 if choice == "Sự cô lập":
                     st.success("Correct! +15 XP | +5 Vocabulary")
                     st.session_state.xp += 15
-                    st.session_state.skills['Vocabulary'] += 5 # Tăng điểm Từ vựng
+                    st.session_state.skills['Vocabulary'] += 5 
                 else:
                     st.error("Wrong answer.")
 
