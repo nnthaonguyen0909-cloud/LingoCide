@@ -76,16 +76,18 @@ with st.sidebar:
 def tab_cinema_mode():
     st.markdown('<p class="big-font">Cinema Mode: Watch & Learn</p>', unsafe_allow_html=True)
     
-    # 1. ADD OPTION FOR CUSTOM USER LINK
+    # 1. MOVIE LIST
     movie_options = {
         "Avengers: Infinity War (Thanos)": "https://www.youtube.com/watch?v=6ZfuNTqbHE8",
-        "Frozen (Let it Go)": "https://www.youtube.com/watch?v=L0MK7qz13bU",
-        "🎬 Use Custom YouTube Video": "custom" # New feature!
+        "Frozen (Let It Go)": "https://www.youtube.com/watch?v=L0MK7qz13bU",
+        "Spider-Man (Great Power)": "https://www.youtube.com/watch?v=0lwkEQOEYJw",
+        "Sofia the First (Theme Song)": "https://www.youtube.com/watch?v=W-oKmdZqemw",
+        "Masha and the Bear (Jam Day)": "https://www.youtube.com/watch?v=KYniUCGPGLs",
+        "🎬 Use Custom YouTube Video": "custom"
     }
     
     selected_movie = st.selectbox("Choose a Scene:", list(movie_options.keys()))
     
-    # 2. HANDLE CUSTOM LINK SELECTION
     if selected_movie == "🎬 Use Custom YouTube Video":
         custom_url = st.text_input("🔗 Paste your YouTube link here (e.g., Taylor Swift MV, Vlogs...):")
         video_url = custom_url if custom_url.strip() != "" else None
@@ -106,7 +108,7 @@ def tab_cinema_mode():
     with col2:
         st.info("Learning Challenge")
         
-        # 3. LEARNING INTERFACE FOR EACH VIDEO
+        # 2. QUESTIONS FOR EACH MOVIE
         if selected_movie == "🎬 Use Custom YouTube Video":
             st.markdown("**Vocabulary Notes:**")
             st.caption("Take notes while watching your favorite clips!")
@@ -122,9 +124,9 @@ def tab_cinema_mode():
         elif "Thanos" in selected_movie:
             st.markdown("**Complete the quote:**")
             st.markdown('*"Dread it. Run from it. _______ arrives all the same."*')
-            ans = st.text_input("Type the missing word:", key="vid_q1")
+            ans = st.text_input("Type the missing word:", key="vid_thanos")
             
-            if st.button("Check Answer", key="btn_check_vid"):
+            if st.button("Check Answer", key="btn_thanos"):
                 if ans.lower() == "destiny":
                     st.balloons()
                     st.success("Correct! +20 XP | +5 Listening")
@@ -136,15 +138,56 @@ def tab_cinema_mode():
         elif "Frozen" in selected_movie:
             st.markdown("**Vocabulary Check:**")
             st.markdown("What does **'Isolation'** mean?")
-            options = ["Connection", "Isolation", "Happiness"]
+            options = ["Connection", "Separation from others", "Happiness"]
             choice = st.radio("Choose meaning:", options)
             if st.button("Check", key="btn_frozen"):
-                if choice == "Isolation":
+                if choice == "Separation from others":
                     st.success("Correct! +15 XP | +5 Vocabulary")
                     st.session_state.xp += 15
                     st.session_state.skills['Vocabulary'] += 5 
                 else:
                     st.error("Wrong answer.")
+
+        elif "Spider-Man" in selected_movie:
+            st.markdown("**Complete the quote:**")
+            st.markdown('*"With great power comes great _______."*')
+            ans = st.text_input("Type the missing word:", key="vid_spiderman")
+            
+            if st.button("Check Answer", key="btn_spiderman"):
+                if ans.lower() == "responsibility":
+                    st.balloons()
+                    st.success("Correct! +20 XP | +5 Listening")
+                    st.session_state.xp += 20
+                    st.session_state.skills['Listening'] += 5 
+                else:
+                    st.error("Try again! Hint: It starts with 'R'")
+
+        elif "Sofia" in selected_movie:
+            st.markdown("**Fill in the lyrics:**")
+            st.markdown('*"I was a girl in the village doing alright, then I became a _______ overnight."*')
+            ans = st.text_input("Type the missing word:", key="vid_sofia")
+            
+            if st.button("Check Answer", key="btn_sofia"):
+                if ans.lower() == "princess":
+                    st.balloons()
+                    st.success("Correct! +20 XP | +5 Listening")
+                    st.session_state.xp += 20
+                    st.session_state.skills['Listening'] += 5 
+                else:
+                    st.error("Try again! Hint: Starts with 'P'")
+
+        elif "Masha" in selected_movie:
+            st.markdown("**Vocabulary Check:**")
+            st.markdown("Masha is very **mischievous**. What does 'mischievous' mean?")
+            options = ["Very quiet and calm", "Naughty and playful", "Sad and lonely"]
+            choice = st.radio("Choose meaning:", options, key="radio_masha")
+            if st.button("Check", key="btn_masha"):
+                if choice == "Naughty and playful":
+                    st.success("Correct! +15 XP | +5 Vocabulary")
+                    st.session_state.xp += 15
+                    st.session_state.skills['Vocabulary'] += 5 
+                else:
+                    st.error("Wrong answer. Try again!")
 
 def tab_flashcards():
     st.markdown('<p class="big-font">Rapid Flashcards</p>', unsafe_allow_html=True)
