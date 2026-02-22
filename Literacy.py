@@ -10,6 +10,8 @@ st.set_page_config(
 )
 
 # ================= SESSION STATE =================
+if 'user_name' not in st.session_state:
+    st.session_state.user_name = ""
 if 'xp' not in st.session_state:
     st.session_state.xp = 0
 if 'level' not in st.session_state:
@@ -39,17 +41,35 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ================= SIDEBAR =================
+# ================= THANH BÊN (SIDEBAR) =================
 with st.sidebar:
-    st.title(f"Level {st.session_state.level}")
+    # Nếu chưa có tên thì hiện ô nhập tên
+    if st.session_state.user_name == "":
+        st.markdown("### Welcome to LingoCine!")
+        name_input = st.text_input("Enter your name to start:")
+        if st.button("Let's Go!"):
+            if name_input.strip() != "":
+                st.session_state.user_name = name_input.strip()
+                st.rerun() # Tải lại trang để cập nhật tên
     
-    st.metric("Total XP", f"{st.session_state.xp} XP")
-    
-    st.markdown("---")
-    st.header("Skill Overview")
-    # Quick metrics display
-    st.write(f"Listening: {st.session_state.skills['Listening']}")
-    st.write(f"Vocabulary: {st.session_state.skills['Vocabulary']}")
-    st.write(f"Grammar: {st.session_state.skills['Grammar']}")
+    # Nếu đã nhập tên rồi thì hiện thông tin
+    else:
+        st.title(f"Hi, {st.session_state.user_name}! 🌟")
+        st.subheader(f"Level {st.session_state.level}")
+        
+        st.metric("Total XP", f"{st.session_state.xp} XP")
+        
+        st.markdown("---")
+        st.header("Skill Overview")
+        st.write(f"Listening: {st.session_state.skills['Listening']}")
+        st.write(f"Vocabulary: {st.session_state.skills['Vocabulary']}")
+        st.write(f"Grammar: {st.session_state.skills['Grammar']}")
+        
+        # Nút đổi tên nếu lỡ nhập sai
+        st.markdown("---")
+        if st.button("Change Name"):
+            st.session_state.user_name = ""
+            st.rerun()
 
 # ================= MAIN INTENTS =================
 
